@@ -22,26 +22,19 @@ var Jira = {
   authenticate: function() {
     //Do nothing here yet.
   },
-  request: function(location, successMethod, failureMethod) {
+  request: function(location) {
     var requestURL = this.options.baseUrl + location;
 
-    $.ajax({
+    return $.ajax({
       url: requestURL,
       dataType: 'json',
-      beforeSend: function(xhr) {
-        if (!Jira.options.oauth) {
-          xhr.setRequestHeader("Authorization", "Basic " + Jira.options.username + ":" + Jira.options.password);
-        }
-      },
-      success: successMethod,
-      failure: failureMethod
-    });
+      async: false,
+      headers: {
+        'Authorization': "Basic " + btoa(Jira.options.username + ":" + Jira.options.password)
+      }
+    }).responseJSON;
   },
   issue: function(ticketNo) {
-    this.request("rest/api/2/issue/" + ticketNo,
-      function(data) {
-        alert(data);
-      },
-      function() {});
+    return this.request("rest/api/2/issue/" + ticketNo);
   }
 };
