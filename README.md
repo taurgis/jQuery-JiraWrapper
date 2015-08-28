@@ -14,77 +14,77 @@ To work this plugin requires jQuery 1.8 or higher.
 
 You can initialize the plugin with the following code:
 
-'''javascript
+```javascript
 Jira.init({
   baseUrl: 'https://jira.atlassian.com/',
   username: 'username',
   password: 'password'
 });
-'''
+```
 
 ### Fetching/updating/deleting an issue
 
 It is possible to fetch an issue and modify it.
 
-'''javascript
+```javascript
   Jira.issue('TICKET-001');
-'''
+```
 
 The following code deletes the issue if you have the permissions!
 
-'''javascript
+```javascript
   Jira.issue('TICKET-001').delete();
-'''
+```
 
 Or you can update a ticket using one of the following functions
 
-'''javascript
+```javascript
   Jira.issue('TICKET-001').updateSummary('Summary Text');
   Jira.issue('TICKET-001').updateName('Name of the ticket');
-'''
+```
 
 Off course if you are planning to do multiple operations to the same ticket it is best to do that with less server requests like this:
 
-'''javascript
+```javascript
   var issue = Jira.issue('TICKET-001'):
 
   issue.updateSummary('Summary Text');
   issue.updateName('Name of the ticket');
-'''
+```
 
 Another option is to do multiple updates within the same request:
 
-'''javascript
-  var ticketUpdate = {
-    "update": {
-        "summary": [
-            {
-                "set": "Bug in business logic"
-            }
-        ],
-        "timetracking": [
-            {
-                "edit": {
-                    "originalEstimate": "1w 1d",
-                    "remainingEstimate": "4d"
-                }
-            }
-        ],
-        "labels": [
-            {
-                "add": "triaged"
-            },
-            {
-                "remove": "blocker"
-            }
-        ],
-        "components": [
-            {
-                "set": ""
-            }
-        ]
-    }
-  };
+```javascript
+var ticketUpdate = {
+  "update": {
+      "summary": [
+          {
+              "set": "Bug in business logic"
+          }
+      ],
+      "timetracking": [
+          {
+              "edit": {
+                  "originalEstimate": "1w 1d",
+                  "remainingEstimate": "4d"
+              }
+          }
+      ],
+      "labels": [
+          {
+              "add": "triaged"
+          },
+          {
+              "remove": "blocker"
+          }
+      ],
+      "components": [
+          {
+              "set": ""
+          }
+      ]
+  }
+};
 
-  Jira.issue('TICKET-001').update(ticketUpdate);
-'''
+Jira.issue('TICKET-001').update(ticketUpdate);
+```
