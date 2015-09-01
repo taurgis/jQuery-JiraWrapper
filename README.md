@@ -4,6 +4,8 @@ A basic jQuery wrapper for the Jira REST API. If you want to use this on your we
 
 Currently only basic authentication is supported, but I will look at OAth later on.
 
+<a href="https://codeclimate.com/github/taurgis/jQuery-JiraWrapper"><img src="https://codeclimate.com/github/taurgis/jQuery-JiraWrapper/badges/gpa.svg" /></a>
+
 ## HOW TO
 
 ### Requirements
