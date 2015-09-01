@@ -40,7 +40,7 @@ Or you can update a ticket using one of the following functions
 
 ```javascript
   Jira.issue('TICKET-001').updateSummary('Summary Text');
-  Jira.issue('TICKET-001').updateName('Name of the ticket');
+  Jira.issue('TICKET-001').updateDescription('Description of the ticket');
 ```
 
 Off course if you are planning to do multiple operations to the same ticket it is best to do that with less server requests like this:

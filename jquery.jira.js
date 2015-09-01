@@ -14,18 +14,18 @@ var Jira = {
     debug: false,
     oauth: false
   },
-  init: function (options) {
+  init: function(options) {
     this.options = $.extend({}, this.options, options);
 
     this.authenticate();
   },
-  authenticate: function () {
+  authenticate: function() {
     //Do nothing here yet.
   },
-  request: function (location, method, data) {
+  request: function(location, method, data) {
     var requestURL = this.options.baseUrl + location;
 
-    if(!method) {
+    if (!method) {
       method = "GET";
     }
 
@@ -41,10 +41,10 @@ var Jira = {
       }
     }).responseJSON;
   },
-  dashboard: function (dashboardId) {
+  dashboard: function(dashboardId) {
     return this.request('rest/api/2/dashboard' + ((dashboardId) ? '/' + dashboardId : ''));
   },
-  issue: function (ticketNo) {
+  issue: function(ticketNo) {
     var jiraTicket = this.request('rest/api/2/issue/' + ticketNo);
 
     return {
@@ -73,18 +73,51 @@ var Jira = {
       comments: jiraTicket.fields.comment.comments,
       worklog: jiraTicket.fields.worklog.worklogs,
       jiraObject: jiraTicket,
-      update: function (updateObject) {
-          return Jira.request('rest/api/2/issue/' + this.key, 'PUT', updateObject);
+      update: function(updateObject) {
+        return Jira.request('rest/api/2/issue/' + this.key, 'PUT', updateObject);
       },
-      updateSummary: function () {
-        // TODO
+      updateSummary: function(summary) {
+        var ticketUpdate = {
+          'update': {
+            'summary': [{
+              'set': summary
+            }]
+          }
+        };
+
+        this.update(ticketUpdate);
       },
-      delete: function () {
+      updateDescription: function(description) {
+        var ticketUpdate = {
+          'update': {
+            'description': [{
+              'set': description
+            }]
+          }
+        };
+
+        this.update(ticketUpdate);
+      },
+      assign: function(user) {
+        var data = {
+          'name': (typeof user === 'string') ? user : user.name
+        };
+
+        return Jira.request('rest/api/2/issue/' + this.key + '/assignee', 'PUT', data);
+      },
+      addComment: function(message) {
+        var data = {
+          "body": message,
+        };
+
+        return Jira.request('rest/api/2/issue/' + this.key + '/comment', 'POST', data);
+      },
+      delete: function() {
         return Jira.request('rest/api/2/issue/' + this.key, 'DELETE');
       }
     };
   },
-  project: function (projectId) {
+  project: function(projectId) {
     var jiraProject = this.request('rest/api/2/project/' + projectId);
 
     return {
@@ -98,7 +131,7 @@ var Jira = {
       jiraObject: jiraProject
     };
   },
-  user: function (username) {
+  user: function(username) {
     var jiraUser = this.request('rest/api/2/user?username=' + username);
 
     return {
@@ -111,5 +144,10 @@ var Jira = {
       groups: jiraUser.groups,
       jiraObject: jiraUser
     };
+  },
+  group: function(group) {
+    var jiraGroup = this.request('rest/api/2/group' + ((group) ? '?groupName=' + group : ''));
+
+    return jiraGroup;
   }
 };
